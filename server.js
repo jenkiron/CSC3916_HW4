@@ -96,10 +96,10 @@ router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
 //creating new move object
 router.post('/movies', function(req,res){
     var movie = new Movie();
-    movie.title = req.body.title;
-    movie.released = req.body.released;
-    movie.genre = req.body.genre;
-    movie.actors = req.body.actors;
+    movie.Title = req.body.Title;
+    movie.Year = req.body.Year;
+    movie.Genre = req.body.Genre;
+    movie.Actors = req.body.Actors;
 
     // save the movie
     movie.save(function(err) {
@@ -111,13 +111,13 @@ router.post('/movies', function(req,res){
 
 //modify movie object
 router.put('/movies', authJwtController.isAuthenticated, function(req,res){
-    var movieTitle = req.query.title;
-    Movie.findOne({title: movieTitle}).exec(function (err, movie) {
+    var movieTitle = req.query.Title;
+    Movie.findOne({Title: movieTitle}).exec(function (err, movie) {
         if (err) res.send(err);
 
-        movie.released = req.body.released;
-        movie.genre = req.body.genre;
-        movie.actors = req.body.actors;
+        movie.Year = req.body.Year;
+        movie.Genre = req.body.Genre;
+        movie.Actors = req.body.Actors;
 
         movie.save(function (err) {
             if (err) return res.send(err);
