@@ -57,7 +57,6 @@ router.post('/signup', function(req, res) {
                 else
                     return res.json(err);
             }
-
             res.json({success: true, msg: 'Successfully created new user.'})
         });
     }
@@ -96,10 +95,10 @@ router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
 //creating new move object
 router.post('/movies',authJwtController.isAuthenticated, function(req,res){
     var movie = new Movie();
-    movie.Title = req.body.Title;
-    movie.Year = req.body.Year;
-    movie.Genre = req.body.Genre;
-    movie.Actors = req.body.Actors;
+    movie.title = req.body.title;
+    movie.year = req.body.year;
+    movie.genre = req.body.genre;
+    movie.actors = req.body.actors;
 
     // save the movie
     movie.save(function(err) {
@@ -115,13 +114,13 @@ router.post('/movies',authJwtController.isAuthenticated, function(req,res){
 
 //modify movie object
 router.put('/movies', authJwtController.isAuthenticated, function(req,res){
-    var movieTitle = req.query.Title;
-    Movie.findOne({Title: movieTitle}).exec(function (err, movie) {
+    var movieTitle = req.query.title;
+    Movie.findOne({title: movieTitle}).exec(function (err, movie) {
         if (err) res.send(err);
 
-        movie.Year = req.body.Year;
-        movie.Genre = req.body.Genre;
-        movie.Actors = req.body.Actors;
+        movie.year = req.body.year;
+        movie.genre = req.body.genre;
+        movie.actors = req.body.actors;
 
         movie.save(function (err) {
             if (err) return res.send(err);
