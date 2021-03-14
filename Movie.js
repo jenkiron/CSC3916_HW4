@@ -1,16 +1,16 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-mongoose.Promise = global.Promise;
+mongoose1.Promise = global.Promise;
 
 //mongoose.connect(process.env.DB, { useNewUrlParser: true });
 try {
-    mongoose.connect( process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true}, () =>
+    mongoose1.connect( process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true}, () =>
         console.log("connected"));
 }catch (error) {
     console.log("could not connect");
 }
-mongoose.set('useCreateIndex', true);
+mongoose1.set('useCreateIndex', true);
 
 
 let MovieSchema = new Schema( {
