@@ -94,7 +94,7 @@ router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
 })
 
 //creating new move object
-router.post('/movies', function(req,res){
+router.post('/movies',authJwtController.isAuthenticated, function(req,res){
     var movie = new Movie();
     movie.Title = req.body.Title;
     movie.Year = req.body.Year;
