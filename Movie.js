@@ -15,7 +15,7 @@ try {
 mongoose.set('useCreateIndex', true);
 
 
-let MovieSchema = new Schema( {
+var MovieSchema = new Schema( {
     title: {type: String, required: true, index: {unique: true, dropDups: true}},
     year: {type: Number, required: true},
     genre: {type: String, required: true, enum: ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mystery", "Thriller", "Western"]},
