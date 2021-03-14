@@ -13,6 +13,7 @@ var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
 var Movie = require('./Movie');
+db = require('./db')();
 
 var app = express();
 app.use(cors());
@@ -101,17 +102,15 @@ router.post('/movies',authJwtController.isAuthenticated, function(req,res) {
     movie.actors = req.body.actors;
 
     // save the movie
-    if (Movie.findOne({title: movie.title}) != null) {
-        movie.save(function (err) {
-            if (err) {
-                if (err.code == 11000)
-                    return res.json({success: false, message: 'Movie already exists.'});
-                else
-                    return res.json(err);
-            }
-            res.json({success: true, message: 'Movie saved'});
-        });
-    }
+    movie.save(function (err) {
+        if (err) {
+            if (err.code == 11000)
+                return res.json({success: false, message: 'Movie already exists.'});
+            else
+                return res.json(err);
+        }
+        res.json({success: true, message: 'Movie saved'});
+    });
 });
 
 //modify movie object
