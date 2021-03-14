@@ -1,5 +1,5 @@
 /*
-CSC3916 HW2
+CSC3916 HW3
 File: Server.js
 Description: Web API scaffolding for Movie API
  */
@@ -7,11 +7,12 @@ Description: Web API scaffolding for Movie API
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var authController = require('./auth');
+//var authController = require('./auth');
 var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
+var Movie = require('./Movie');
 
 var app = express();
 app.use(cors());
@@ -83,6 +84,56 @@ router.post('/signin', function (req, res) {
             }
         })
     })
+});
+
+router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
+    Movie.find(function (err, movie) {
+        if(err) res.json(err.message);
+        res.json(movie);
+    })
+})
+
+//creating new move object
+router.post('/movies', function(req,res){
+    var movie = new Movie();
+    movie.title = req.body.title;
+    movie.released = req.body.released;
+    movie.genre = req.body.genre;
+    movie.actors = req.body.actors;
+
+    // save the movie
+    movie.save(function(err) {
+        if(err) return res.send(err);
+        res.json({ success: true, message: 'Movie saved' });
+    });
+
+});
+
+//modify movie object
+router.put('/movies', authJwtController.isAuthenticated, function(req,res){
+    var movieTitle = req.query.title;
+    Movie.findOne({title: movieTitle}).exec(function (err, movie) {
+        if (err) res.send(err);
+
+        movie.released = req.body.released;
+        movie.genre = req.body.genre;
+        movie.actors = req.body.actors;
+
+        movie.save(function (err) {
+            if (err) return res.send(err);
+            // res.json({success: true, message: 'Movie updated'});
+            res.status(200).json(movie);
+        });
+    });
+
+});
+router.delete('/movies', authJwtController.isAuthenticated, function(req,res){
+    Movie.findOne({title:req.body.title},function(err,movie) {
+        if (err) res.send(err);
+
+        movie.remove({title:req.body.title});
+        res.json({success: true, message: 'Movie Deleted'});
+    });
 });
 
 app.use('/', router);

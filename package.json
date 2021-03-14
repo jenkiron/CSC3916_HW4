@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shawnmccarthy/CSC3916_HW3.git"
+    "url": "git+https://github.com/jenkiron/CSC3916_HW3.git"
   },
   "keywords": [
     "Movie"
   ],
-  "author": "Shawn McCarthy",
+  "author": "Ronald Jenkins",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shawnmccarthy/CSC3916_HW3/issues"
+    "url": "https://github.com/jenkiron/CSC3916_HW3/issues"
   },
-  "homepage": "https://github.com/shawnmccarthy/CSC3916_HW3#readme",
+  "homepage": "https://github.com/jenkiron/CSC3916_HW3#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",
@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.18",
+    "mongoose": "^5.12.0",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0"
