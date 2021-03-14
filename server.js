@@ -93,7 +93,7 @@ router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
 })
 
 //creating new move object
-router.post('/movies',authJwtController.isAuthenticated, function(req,res){
+router.post('/movies',authJwtController.isAuthenticated, function(req,res) {
     var movie = new Movie();
     movie.title = req.body.title;
     movie.year = req.body.year;
@@ -101,15 +101,17 @@ router.post('/movies',authJwtController.isAuthenticated, function(req,res){
     movie.actors = req.body.actors;
 
     // save the movie
-    movie.save(function(err) {
-        if (err) {
-            if (err.code == 11000)
-                return res.json({ success: false, message: 'Movie already exists.'});
-            else
-                return res.json(err);
-        }
-        res.json({ success: true, message: 'Movie saved' });
-    });
+    if (Movie.findOne({title: movie.title}) != null) {
+        movie.save(function (err) {
+            if (err) {
+                if (err.code == 11000)
+                    return res.json({success: false, message: 'Movie already exists.'});
+                else
+                    return res.json(err);
+            }
+            res.json({success: true, message: 'Movie saved'});
+        });
+    }
 });
 
 //modify movie object
