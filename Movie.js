@@ -22,6 +22,7 @@ var MovieSchema = new Schema( {
     actors: {type: Array, required: true, items: {actorName: String, characterName: String}, minItems: 3}
 });
 
+/*
 MovieSchema.pre('save', function(next){
     var movie = this;
 
@@ -34,6 +35,6 @@ MovieSchema.pre('save', function(next){
 
     next();
 });
-
+*/
 //return the model to the server
 module.exports = mongoose.model('Movie', MovieSchema);
