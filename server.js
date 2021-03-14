@@ -108,8 +108,8 @@ router.post('/movies',authJwtController.isAuthenticated, function(req,res) {
                 return res.json({success: false, message: 'Movie already exists.'});
             else
                 return res.json(err);
-        }
-        res.json({success: true, message: 'Movie saved'});
+        }else
+            res.json({success: true, message: 'Movie saved'});
     });
 });
 
