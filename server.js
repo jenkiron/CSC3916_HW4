@@ -91,7 +91,7 @@ router.get('/movies',authJwtController.isAuthenticated, function(req, res) {
         if(err) res.json(err.message);
         res.json(movie);
     })
-})
+});
 
 //creating new move object
 router.post('/movies',authJwtController.isAuthenticated, function(req,res) {

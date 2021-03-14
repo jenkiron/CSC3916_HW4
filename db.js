@@ -1,6 +1,3 @@
-/**
- * Created by Ronald Jenkins.
- */
 'use strict;';
 //Include crypto to generate the movie id
 var crypto = require('crypto');
