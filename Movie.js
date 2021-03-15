@@ -22,6 +22,8 @@ var MovieSchema = new Schema( {
     actors: {type: Array, required: true, items: {actorName: String, characterName: String}, minItems: 3}
 });
 
+//this is broken, movie never gets stored. it catches bad input
+//but nothing happens with good input
 /*
 MovieSchema.pre('save', function(next){
     var movie = this;

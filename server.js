@@ -100,6 +100,12 @@ router.route('/movies')
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
 
+        if(movie.title == null){
+            return res.json({success: false, message: 'Please include a title.'});
+        }else if(movie.year>2021 || movie.year<1900){
+            return res.json({success: false, message: 'Release not in range.'});
+        }
+
         // save the movie
         movie.save(function (err) {
             if (err) {
@@ -122,9 +128,9 @@ router.route('/movies')
     .delete(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndDelete( {title: req.body.title}).exec(function (err) {
             if (err)
-                res.send(err)
+                return res.json(err);
             else
-                res.json( {status: 200, message: "Movie Deleted"})
+                return res.json( {status: 200, message: "Movie Deleted"});
         });
     });
 
