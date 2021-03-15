@@ -101,13 +101,14 @@ router.route('/movies')
         movie.actors = req.body.actors;
 
         movie.save(function (err) {
-            if (err.code == 11000)
-                res.json({success: false, message: 'That movie already exists.'});
-            else
-                return res.send(err);
-
-            res.json({success: true, message: 'Created'});
-        })
+            if (err) {
+                if (err.code === 11000)
+                    return res.json({success: false, message: 'That movie already exists.'});
+                else
+                    return res.json(err);
+            }
+            res.json({success: true, message: 'Created Movie.'});
+        });
     })
     .put(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndUpdate({title: req.body.title}, {releaseYear: req.body.releaseYear}).exec(function (err) {
