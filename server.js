@@ -101,8 +101,13 @@ router.route('/movies')
         movie.actors = req.body.actors;
 
         movie.save(function (err) {
-            if (err) res.json(err);
-            res.send({success: true, message: 'Movie saved'});
+            if (err) {
+                if (err.code == 11000)
+                    return res.json({success: false, message: 'Movie already exists.'});
+                else
+                    return res.json(err);
+            }
+            res.send({status: 200, message: "movie saved"});
         })
     })
     .put(authJwtController.isAuthenticated, function(req, res){
