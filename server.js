@@ -121,7 +121,7 @@ router.route('/movies')
             movie.year = req.body.year;
             movie.genre = req.body.genre;
             movie.actors = req.body.actors;
-            Movie.updateOne({title: req.query.title}, movie, function (err) {
+            Movie.findOneAndUpdate({title: req.query.title}, movie).exec(function (err) {
                 if (err) res.send(err);
 
                 res.json({success: true, message: 'Updated'});
