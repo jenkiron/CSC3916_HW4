@@ -105,17 +105,11 @@ router.route('/movies')
         } else if (movie.year > 2021 || movie.year < 1900) {
             return res.json({success: false, message: 'Release not in range.'});
         }
-
-        // save the movie
-        if (Movie.findOne({title: movie.title, year: movie.year, genre: movie.genre, actors: movie.actors}) != null) {
-            return res.json({success: false, message: 'Movie already exists.'});
-        } else {
-            movie.save(function (err) {
-                if (err) {
-                    return res.json(err);
-                } else res.send({success: true, message: 'Movie saved'});
-            })
-        }
+        movie.save(function (err) {
+            if (err) {
+                return res.json(err);
+            } else res.send({success: true, message: 'Movie saved'});
+        })
     })
     .put(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndUpdate({title: req.body.title}, {releaseYear: req.body.releaseYear}).exec(function (err) {
