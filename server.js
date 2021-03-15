@@ -117,12 +117,14 @@ router.route('/movies')
     .put(authJwtController.isAuthenticated, function(req, res){
         if (Movie.findOne({title: req.query.title}) != null) {
             //var newVals = { $set: req.body };
-            Movie.updateOne({title: req.query.title}, req.body, function(err, obj) {
+            Movie.updateOne({title: req.query.title}, req.body, function (err, obj) {
                 if (err) res.send(err);
 
                 res.json({success: true, message: 'Updated'});
             })
-        };
+        }
+        else
+            res.json({success: false, message: 'Movie does not exist.'});
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndDelete( {title: req.body.title}).exec(function (err) {
