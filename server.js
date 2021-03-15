@@ -102,9 +102,6 @@ router.route('/movies')
 
         movie.save(function (err) {
             if (err) {
-                if (err.code === 11000)
-                    return res.json({success: false, message: 'That hhhhmovie already exists.'});
-                else
                     return res.json(err);
             }
             res.json({success: true, message: 'Created Movie.'});
