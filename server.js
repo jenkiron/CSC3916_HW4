@@ -115,12 +115,14 @@ router.route('/movies')
         }
     })
     .put(authJwtController.isAuthenticated, function(req, res){
-        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year}).exec(function (err) {
-            if (err)
-                return res.send(err)
-            else
-                res.json( {status: 200, message: "Movie Updated"})
-        });
+        if (Movie.findOne({title: req.query.title}) != null) {
+            //var newVals = { $set: req.body };
+            Movie.updateOne({title: req.query.title}, req.body, function(err, obj) {
+                if (err) res.send(err);
+
+                res.json({success: true, message: 'Updated'});
+            })
+        };
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndDelete( {title: req.body.title}).exec(function (err) {
