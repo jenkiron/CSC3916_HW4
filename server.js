@@ -93,29 +93,29 @@ router.route('/movies')
             res.json(movie);
         })
     })
-    .post(authJwtController.isAuthenticated, function(req, res){
+    .post(authJwtController.isAuthenticated, function(req, res) {
         var movie = new Movie();
         movie.title = req.body.title;
         movie.year = req.body.year;
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
 
-        if(movie.title == null){
+        if (movie.title == null) {
             return res.json({success: false, message: 'Please include a title.'});
-        }else if(movie.year>2021 || movie.year<1900){
+        } else if (movie.year > 2021 || movie.year < 1900) {
             return res.json({success: false, message: 'Release not in range.'});
         }
 
         // save the movie
-        movie.save(function (err) {
-            if (err) {
-                if (err.code == 11000)
-                    return res.json({success: false, message: 'Movie already exists.'});
-                else
+        if (Movie.findOne({title: movie.title, year: movie.year, genre: movie.genre, actors: movie.actors}) != null) {
+            return res.json({success: false, message: 'Movie already exists.'});
+        } else {
+            movie.save(function (err) {
+                if (err) {
                     return res.json(err);
-            }
-            res.send({success: true, message: 'Movie saved'});
-        })
+                } else res.send({success: true, message: 'Movie saved'});
+            })
+        }
     })
     .put(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndUpdate({title: req.body.title}, {releaseYear: req.body.releaseYear}).exec(function (err) {
