@@ -116,8 +116,12 @@ router.route('/movies')
     })
     .put(authJwtController.isAuthenticated, function(req, res){
         if (Movie.findOne({title: req.query.title}) != null) {
-            //var newVals = { $set: req.body };
-            Movie.updateOne({title: req.query.title}, req.body, function (err, obj) {
+            var movie = new Movie();
+            movie.title = req.body.title;
+            movie.year = req.body.year;
+            movie.genre = req.body.genre;
+            movie.actors = req.body.actors;
+            Movie.updateOne({title: req.query.title}, movie, function (err) {
                 if (err) res.send(err);
 
                 res.json({success: true, message: 'Updated'});
