@@ -115,20 +115,12 @@ router.route('/movies')
         }
     })
     .put(authJwtController.isAuthenticated, function(req, res){
-        if (Movie.findOne({title: req.query.title}) != null) {
-            var movie = new Movie();
-            movie.title = req.body.title;
-            movie.year = req.body.year;
-            movie.genre = req.body.genre;
-            movie.actors = req.body.actors;
-            Movie.findOneAndUpdate({title: req.query.title}, movie).exec(function (err) {
-                if (err) res.send(err);
-
-                res.json({success: true, message: 'Updated'});
-            })
-        }
-        else
-            res.json({success: false, message: 'Movie does not exist.'});
+        Movies.findOneAndUpdate({title: req.body.title}, {releaseYear: req.body.releaseYear}).exec(function (err) {
+            if (err)
+                res.send(err)
+            else
+                res.json( {status: 200, message: "Movie year updated."})
+        });
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndDelete( {title: req.body.title}).exec(function (err) {
