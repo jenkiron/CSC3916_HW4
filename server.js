@@ -100,8 +100,8 @@ router.route('/movies')
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
 
-        if(movie.actors.length < 3)
-            return res.json({success: false, message: 'Not enough actors'});
+        if(movie.actors.length < 3 || movie.title == null || movie.year > 2021 || movie.year < 1900)
+            return res.json({success: false, message: 'Please enter valid options.'});
         else {
             movie.save(function (err) {
                 if (err) {
