@@ -115,7 +115,7 @@ router.route('/movies')
         }
     })
     .put(authJwtController.isAuthenticated, function(req, res){
-        Movie.findOneAndUpdate({title: req.body.title}, {releaseYear: req.body.releaseYear}).exec(function (err) {
+        Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year}).exec(function (err) {
             if (err)
                 res.send(err)
             else
