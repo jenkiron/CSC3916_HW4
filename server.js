@@ -100,13 +100,9 @@ router.route('/movies')
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
 
-        if (movie.year > 2021 || movie.year < 1900) {
-            return res.json({success: false, message: 'Release not in range.'});
-        }
         movie.save(function (err) {
-            if (err) {
-                return res.json(err);
-            } else res.send({success: true, message: 'Movie saved'});
+            if (err) res.json(err);
+            res.send({success: true, message: 'Movie saved'});
         })
     })
     .put(authJwtController.isAuthenticated, function(req, res){
