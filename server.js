@@ -113,7 +113,7 @@ router.route('/movies')
     .put(authJwtController.isAuthenticated, function(req, res){
         Movie.findOneAndUpdate({title: req.body.title}, {year: req.body.year}).exec(function (err) {
             if (err)
-                res.send(err)
+                return res.send(err)
             else
                 res.json( {status: 200, message: "Movie Updated"})
         });
@@ -123,7 +123,7 @@ router.route('/movies')
             if (err)
                 return res.json(err);
             else
-                return res.json( {status: 200, message: "Movie Deleted"});
+                res.json( {status: 200, message: "Movie Deleted"});
         });
     });
 
