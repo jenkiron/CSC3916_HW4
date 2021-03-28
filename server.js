@@ -159,7 +159,7 @@ router.route('/reviews')
                     return res.send(err);
                 }else
                     return res.json({success: true, message: 'Review Added Successfully for ' + req.body.title.toString(), review: review});
-            });
+            })
         });//Movie.findOne
     })//post review
     .get(function (req, res) {
