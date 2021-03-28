@@ -164,7 +164,7 @@ router.route('/reviews')
        if(req.body.reviews === true) {
            Movie.findOne({title: req.body.title}, function (err, movie){
                if (err){
-                   return res.status(403).json({success:false, msg:'Cannot get reviews for this movie.'});
+                   return res.send(err);
                }else if(!movie){
                    return res.status(403).json({success:false, msg:'Cannot find the movie title.'});
                }else{
@@ -173,9 +173,9 @@ router.route('/reviews')
                        .lookup({from:'reviews', localField:'title', foreignField:'movieName', as: 'Movie-Reviews'})
                        .exec(function (err,result){
                            if(err){
-                               return res.status(403).json({success: false, Comment:'Could not find the movie you wanted.'});
+                               return res.send(err);
                            }else{
-                               return res.status(200).json({Message: 'Here is the list of reviews for' + req.body.title.toString(),movie:result});
+                               return res.status(200).json({Message: 'Here is the list of reviews for ' + req.body.title.toString(), movie: result});
                            }
                        })
                }
