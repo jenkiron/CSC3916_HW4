@@ -164,9 +164,9 @@ router.route('/reviews')
     .get(function (req, res) {
         if (req.body.reviews === true) {
             Movie.findOne({title: req.body.title}, function (err, movie) {
-                if (err) {
+                if (err)
                     return res.send(err);
-                } else if (!movie) {
+                if (movie === null) {
                     return res.json({
                         Success: false,
                         Message: 'Cannot find the movie title ' + req.body.title.toString()
