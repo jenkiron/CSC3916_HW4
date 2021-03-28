@@ -197,7 +197,7 @@ router.route('/reviews')
                }
            })
        }
-    })
+    });
 
 
 app.use('/', router);
