@@ -162,27 +162,23 @@ router.route('/reviews')
     })//post review
     .get(function (req, res) {
        if(req.body.reviews === true) {
-           Movie.aggregate([
-               {
-                   $lookup: {
-                       from: 'reviews',
-                       localField: 'title',
-                       foreignField: 'movieName',
-                       as: 'Movie-Reviews'
-                   }
-               },
-               {
-                   $match: {
-                       movieName: req.body.title.toString()
-                   }
+           Movie.findOne({title: req.body.title}, function (err, movie){
+               if (err){
+                   return res.status(403).json({success:false, msg:'Cannot get reviews for this movie.'});
+               }else if(!movie){
+                   return res.status(403).json({success:false, msg:'Cannot find the movie title.'});
+               }else{
+                   Movie.aggregate()
+                       .match({})
+                       .lookup({from:'reviews', localField:'title', foreignField:'movieName', as: 'Movie-Reviews'})
+                       .exec(function (err,result){
+                           if(err){
+                               return res.status(403).json({success: false, Comment:'Could not find the movie you wanted.'});
+                           }else{
+                               return res.status(200).json({Message: 'Here is the list of reviews for' + req.body.title.toString(),movie:result});
+                           }
+                       })
                }
-           ]).exec(function (err, movie) {
-               if (err)
-                   res.send(err);
-               if(!movie)
-                   res.json({message: 'Failed to find anything you specified.', success: 'Failed'})
-
-               res.json({message: 'Returning Reviews', movie:movie});
            });
        }else{
 
