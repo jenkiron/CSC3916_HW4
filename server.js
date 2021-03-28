@@ -166,7 +166,7 @@ router.route('/reviews')
                if (err){
                    return res.send(err);
                }else if(!movie){
-                   return res.status(403).json({success:false, msg:'Cannot find the movie title.'});
+                   return res.json({Success: false, Message: 'Cannot find the movie title ' + req.body.title.toString()});
                }else{
                    Movie.aggregate()
                        .match({title: req.body.title.toString()})
@@ -186,9 +186,9 @@ router.route('/reviews')
                if (err) {
                    return res.send(err);
                } else if (!movie) {
-                   return res.status(403).json({Success: false, msg: 'Cannot find the movie title.'});
+                   return res.status(403).json({Success: false, Message: 'Cannot find the movie title ' + req.body.title.toString()});
                } else {
-                   return res.json({message: 'Here is a movie with no reviews.', Movie: movie});
+                   return res.json({Message: 'Here is a movie with no reviews.', Movie: movie});
                }
            })
        }
