@@ -130,7 +130,7 @@ router.route('/movies')
         });
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
-        Movie.remove( {title: req.body.title}).exec(function (err, movie) {
+        Movie.findOneAndRemove( {title: req.body.title}).exec(function (err, movie) {
             if (err)
                 return res.json(err);
             else if(!movie)
@@ -158,7 +158,7 @@ router.route('/reviews')
                 if (err) {
                     return res.send(err);
                 }else
-                    res.json({success: true, message: 'Review Added Successfully for ' + req.body.title.toString(), review: review});
+                    return res.json({success: true, message: 'Review Added Successfully for ' + req.body.title.toString(), review: review});
             });
         });//Movie.findOne
     })//post review
