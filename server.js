@@ -181,10 +181,18 @@ router.route('/reviews')
                }
            });
 
-       }else{
-
+       }else {
+           Movie.findOne({title: req.body.title}, function (err, movie) {
+               if (err) {
+                   return res.send(err);
+               } else if (!movie) {
+                   return res.status(403).json({Success: false, msg: 'Cannot find the movie title.'});
+               } else {
+                   return res.json({message: 'Here is a movie with no reviews.', Movie: movie});
+               }
+           })
        }
-    })//get
+    })
 
 
 app.use('/', router);
