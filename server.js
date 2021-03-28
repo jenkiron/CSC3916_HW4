@@ -173,7 +173,7 @@ router.route('/reviews')
                },
                {
                    $match: {
-                       movieName: req.body.title
+                       movieName: req.body.title.toString()
                    }
                }
            ]).exec(function (err, movie) {
