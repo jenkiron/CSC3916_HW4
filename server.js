@@ -138,7 +138,7 @@ router.route('/movies')
         });
     });
 
-router.route('/review')
+router.route('/reviews')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
         Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
