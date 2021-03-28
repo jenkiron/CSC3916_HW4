@@ -173,7 +173,7 @@ router.route('/reviews')
                },
                {
                    $match: {
-                       "movieName": req.body.title,
+                       movieName: req.body.title
                    }
                }
            ]).exec(function (err, movie) {
@@ -182,7 +182,7 @@ router.route('/reviews')
                if(!movie)
                    res.json({message: 'Failed to find anything you specified.', success: 'Failed'})
 
-               res.json({message: 'hello', movie:movie});
+               res.json({message: 'Returning Reviews', movie:movie});
            });
        }else{
 
