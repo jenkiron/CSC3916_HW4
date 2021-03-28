@@ -188,7 +188,7 @@ router.route('/reviews')
                } else if (!movie) {
                    return res.status(403).json({Success: false, Message: 'Cannot find the movie title ' + req.body.title.toString()});
                } else {
-                   return res.json({Message: 'Here is a movie with no reviews.', Movie: movie});
+                   return res.json({Message: 'Here is your movie ' + req.body.title.toString() + ' with no reviews.', Movie: movie});
                }
            })
        }
