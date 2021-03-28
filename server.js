@@ -8,12 +8,14 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 //var authController = require('./auth');
+//db = require('./db')();
 var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
 var Movie = require('./Movie');
-//db = require('./db')();
+var Reviews = require('./Reviews');
+var userName;
 
 var app = express();
 app.use(cors());
@@ -77,6 +79,7 @@ router.post('/signin', function (req, res) {
             if (isMatch) {
                 var userToken = { id: user.id, username: user.username };
                 var token = jwt.sign(userToken, process.env.SECRET_KEY);
+                userName = userNew.username;
                 res.json ({success: true, token: 'JWT ' + token});
             }
             else {
@@ -85,6 +88,10 @@ router.post('/signin', function (req, res) {
         })
     })
 });
+
+router.get('/', function (req, res) {
+    res.send('Hi')
+})
 
 router.route('/movies')
     .get(authJwtController.isAuthenticated, function(req, res) {
@@ -123,13 +130,64 @@ router.route('/movies')
         });
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
-        Movie.findOneAndDelete( {title: req.body.title}).exec(function (err) {
+        Movie.remove( {title: req.body.title}).exec(function (err) {
             if (err)
                 return res.json(err);
             else
                 res.json( {status: 200, message: "Movie Deleted"});
         });
     });
+
+router.route('/review')
+    .post(authJwtController.isAuthenticated, function (req, res) {
+
+        Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
+            if (err)
+                return res.json(err);
+            if (!movie)
+                return res.json({success: false, message: 'No movie exists by that name.'});
+
+            var Review = new Reviews({reviewer: userName,
+                quote: req.body.quote,
+                rating: req.body.rating,
+                movieName: req.body.movieName});
+
+            Review.save(function (err, review) {
+                if (err) {
+                    return res.send(err);
+                }else
+                    res.json({success: true, message: 'Review Added Successfully', review: review});
+            });
+        });//Movie.findOne
+    })//post review
+    .get(function (req, res) {
+       if(req.body.reviews === true) {
+           Movie.aggregate([
+               {
+                   $lookup: {
+                       from: 'reviews',
+                       localField: 'title',
+                       foreignField: 'movieName',
+                       as: 'Movie-Reviews'
+                   }
+               },
+               {
+                   $match: {
+                       "movieName": req.body.title,
+                   }
+               }
+           ]).exec(function (err, movie) {
+               if (err)
+                   res.send(err);
+               if(!movie)
+                   res.json({message: 'Failed to find anything you specified.', success: 'Failed'})
+
+               res.json({message: 'hello', movie:movie});
+           });
+       }else{
+
+       }
+    })//get
 
 
 app.use('/', router);
