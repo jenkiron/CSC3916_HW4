@@ -145,7 +145,7 @@ router.route('/reviews')
             if (err)
                 return res.json(err);
             if (!movie)
-                return res.json({success: false, message: 'No movie exists by that name.'});
+                return res.json({Success: false, Message: 'No movie exists by that name ' + req.body.title.toString()});
 
             var Review = new Reviews({reviewer: userName,
                 quote: req.body.quote,
@@ -156,7 +156,7 @@ router.route('/reviews')
                 if (err) {
                     return res.send(err);
                 }else
-                    res.json({success: true, message: 'Review Added Successfully', review: review});
+                    res.json({success: true, message: 'Review Added Successfully for ' + req.body.title.toString(), review: review});
             });
         });//Movie.findOne
     })//post review
