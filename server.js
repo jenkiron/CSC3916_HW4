@@ -140,10 +140,10 @@ router.route('/reviews')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
         Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
-            if (err) {
+            if (err)
                 return res.json(err);
-            }else if (movie === null) {
-                return res.json({Success: false, Message: 'No movie exists by that name ' + req.body.title.toString()});
+            if (movie === null) {
+                return res.json({Success: false, Message: 'No movie exists by that name.'});
             }else {
                 var Review = new Reviews({
                     reviewer: userName,
