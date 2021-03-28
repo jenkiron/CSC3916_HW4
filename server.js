@@ -144,7 +144,7 @@ router.route('/reviews')
         Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
             if (err)
                 return res.json(err);
-            if (movie === null)
+            if (!movie)
                 return res.json({Success: false, Message: 'No movie exists by that name ' + req.body.title.toString()});
 
             var Review = new Reviews({reviewer: userName,
