@@ -130,9 +130,11 @@ router.route('/movies')
         });
     })
     .delete(authJwtController.isAuthenticated, function(req, res){
-        Movie.remove( {title: req.body.title}).exec(function (err) {
+        Movie.remove( {title: req.body.title}).exec(function (err, movie) {
             if (err)
                 return res.json(err);
+            else if(!movie)
+                res.json( {Success: 'Failed', Message: 'Movie does not exist.'});
             else
                 res.json( {status: 200, message: "Movie Deleted"});
         });
