@@ -169,7 +169,7 @@ router.route('/reviews')
                    return res.status(403).json({success:false, msg:'Cannot find the movie title.'});
                }else{
                    Movie.aggregate()
-                       .match({})
+                       .match({title: req.body.title.toString()})
                        .lookup({from:'reviews', localField:'title', foreignField:'movieName', as: 'Movie-Reviews'})
                        .exec(function (err,result){
                            if(err){
@@ -180,6 +180,7 @@ router.route('/reviews')
                        })
                }
            });
+
        }else{
 
        }
