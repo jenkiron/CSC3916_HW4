@@ -144,22 +144,25 @@ router.route('/reviews')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
         Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
-            if (err)
+            if (err) {
                 return res.json(err);
-            if (!movie)
+            }else if (!movie) {
                 return res.json({Success: false, Message: 'No movie exists by that name ' + req.body.title.toString()});
+            }else {
+                var Review = new Reviews({
+                    reviewer: userName,
+                    quote: req.body.quote,
+                    rating: req.body.rating,
+                    movieName: req.body.movieName
+                });
 
-            var Review = new Reviews({reviewer: userName,
-                quote: req.body.quote,
-                rating: req.body.rating,
-                movieName: req.body.movieName});
-
-            Review.save(function (err, review) {
-                if (err) {
-                    return res.send(err);
-                }else
-                    return res.json({success: true, message: 'Review Added Successfully.' , review: review});
-            })
+                Review.save(function (err, review) {
+                    if (err) {
+                        return res.send(err);
+                    } else
+                        return res.json({success: true, message: 'Review Added Successfully.'});
+                })
+            }
         });//Movie.findOne
     })//post review
     .get(function (req, res) {
