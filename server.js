@@ -176,7 +176,7 @@ router.route('/reviews')
                     Movie.aggregate()
                         .match({title: req.body.title.toString()})
                         .lookup({from: 'reviews', localField: 'title', foreignField: 'movieName', as: 'Movie-Reviews'})
-                        .addFields( {avgRating: {avg: '$reviews.rating'}})
+                        .addFields( {avgRating: {$avg: '$reviews.rating'}})
                         .exec(function (err, result) {
                             if (err) {
                                 return res.send(err);
