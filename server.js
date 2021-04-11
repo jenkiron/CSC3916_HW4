@@ -90,48 +90,11 @@ router.post('/signin', function (req, res) {
 });
 
 router.route('/movies')
-    .get(function (req, res) {
-        if (req.query.reviews === true) {
-            Movie.findOne({title: req.body.title}, function (err, movie) {
-                if (err)
-                    return res.send(err);
-                if (movie === null) {
-                    return res.json({
-                        Success: false,
-                        Message: 'Cannot find the movie title ' + req.body.title.toString()
-                    });
-                } else {
-                    Movie.aggregate()
-                        .match({title: req.body.title.toString()})
-                        .lookup({from: 'reviews', localField: 'title', foreignField: 'movieName', as: 'Movie-Reviews'})
-                        .addFields( {avgRating: {$avg: '$Movie-Reviews.rating'}})
-                        .exec(function (err, result) {
-                            movie.avgRating = result[0].avgRating;
-                            if (err) {
-                                return res.send(err);
-                            } else {
-                                return res.status(200).json({
-                                    Message: 'Here is the list of reviews for ' + req.body.title.toString(),
-                                    movie: result
-                                });
-                            }
-                        })
-                }
-            });
-        } else {
-            Movie.findOne({title: req.body.title}, function (err, movie) {
-                if (err) {
-                    return res.send(err);
-                } else if (!movie) {
-                    return res.status(403).json({
-                        Success: false,
-                        Message: 'Cannot find the movie title ' + req.body.title.toString()
-                    });
-                } else {
-                    return res.json({Message: 'Here is your movie ' + req.body.title.toString(), Movie: movie});
-                }
-            })
-        }
+    .get(authJwtController.isAuthenticated, function(req, res) {
+        Movie.find(function (err, movie) {
+            if (err) res.json(err.message);
+            res.json(movie);
+        })
     })
     .post(authJwtController.isAuthenticated, function(req, res) {
         var movie = new Movie();
@@ -198,10 +161,9 @@ router.route('/movie/:movieName')
                 })
             }
         });//Movie.findOne
-    });//post review
-/*
+    })//post review
     .get(function (req, res) {
-        if (req.query.reviews === true) {
+        if (req.body.reviews === true) {
             Movie.findOne({title: req.body.title}, function (err, movie) {
                 if (err)
                     return res.send(err);
@@ -243,7 +205,7 @@ router.route('/movie/:movieName')
             })
         }
     });
-*/
+
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
