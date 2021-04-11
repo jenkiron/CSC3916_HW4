@@ -178,6 +178,7 @@ router.route('/reviews')
                         .lookup({from: 'reviews', localField: 'title', foreignField: 'movieName', as: 'Movie-Reviews'})
                         .addFields( {avgRating: {$avg: '$reviews.rating'}})
                         .exec(function (err, result) {
+                            movie.avgRating = result[0].avgRating;
                             if (err) {
                                 return res.send(err);
                             } else {
