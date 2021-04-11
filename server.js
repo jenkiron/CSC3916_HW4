@@ -102,6 +102,7 @@ router.route('/movies')
         movie.year = req.body.year;
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
+        movie.imageURL = req.body.imageURL;
 
         if(movie.actors.length < 3 || movie.title == null || movie.year > 2021 || movie.year < 1900)
             return res.json({success: false, message: 'Please enter valid options.'});
@@ -187,7 +188,6 @@ router.route('/reviews')
                         })
                 }
             });
-
         } else {
             Movie.findOne({title: req.body.title}, function (err, movie) {
                 if (err) {
