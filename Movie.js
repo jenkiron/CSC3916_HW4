@@ -19,7 +19,8 @@ var MovieSchema = new Schema( {
     title: {type: String, required: true, index: {unique: true}},
     year: {type: Number, required: true},
     genre: {type: String, required: true, enum: ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Mystery", "Thriller", "Western"]},
-    actors: {type: Array, required: true, items: {actorName: String, characterName: String}, minItems: 3}
+    actors: {type: Array, required: true, items: {actorName: String, characterName: String}, minItems: 3},
+    imageURL: {type: String}
 });
 
 //this is broken, movie never gets stored. it catches bad input
