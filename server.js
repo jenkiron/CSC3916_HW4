@@ -137,7 +137,7 @@ router.route('/movies')
         });
     });
 
-router.route('/reviews')
+router.route('/movie/:movieName')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
         Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
@@ -163,7 +163,7 @@ router.route('/reviews')
         });//Movie.findOne
     })//post review
     .get(function (req, res) {
-        if (req.body.reviews === true) {
+        if (req.query.reviews === true) {
             Movie.findOne({title: req.body.title}, function (err, movie) {
                 if (err)
                     return res.send(err);
