@@ -103,6 +103,9 @@ router.route('/movies')
                 },
                 {
                     $addFields:{avgRating: {$avg: '$reviews.rating'}}
+                },
+                {
+                    $sort: {rating: -1}
                 }
             ]).exec(function (err, movie){
                 if(err){
