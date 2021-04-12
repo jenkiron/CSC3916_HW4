@@ -103,11 +103,15 @@ router.route('/movies')
                 },
                 {
                     $addFields:{avgRating: {$avg: "$reviews.rating"}}
+                },
+                {
+                    $sort: {rating: -1}
                 }
             ]).exec(function (err, movie){
                 if(err){
                     return res.send(err);
                 }else{
+
                     return res.json(movie);
                 }
             })
@@ -137,7 +141,6 @@ router.route('/movies')
         movie.genre = req.body.genre;
         movie.actors = req.body.actors;
         movie.imageURL = req.body.imageURL;
-
         if(movie.actors.length < 3 || movie.title == null || movie.year > 2021 || movie.year < 1900)
             return res.json({success: false, message: 'Please enter valid options.'});
         else {
