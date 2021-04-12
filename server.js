@@ -170,7 +170,7 @@ router.route('/movies')
                 res.json( {status: 200, message: "Movie Deleted"});
         });
     });
-
+/*
 router.route('/movie/:movieName')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
@@ -239,7 +239,7 @@ router.route('/movie/:movieName')
             })
         }
     });
-
+*/
 router.route('/reviews')
     .post(authJwtController.isAuthenticated, function (req, res) {
 
