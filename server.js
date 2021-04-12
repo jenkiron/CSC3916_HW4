@@ -240,6 +240,76 @@ router.route('/movie/:movieName')
         }
     });
 
+router.route('/reviews')
+    .post(authJwtController.isAuthenticated, function (req, res) {
+
+        Movie.findOne({title: req.body.movieName}).exec(function(err, movie) {
+            if (err)
+                return res.json(err);
+            if (movie === null) {
+                return res.json({Success: false, Message: 'No movie exists by that name.'});
+            }else {
+                var Review = new Reviews({
+                    reviewer: userName,
+                    quote: req.body.quote,
+                    rating: req.body.rating,
+                    movieName: req.body.movieName
+                });
+
+                Review.save(function (err, review) {
+                    if (err) {
+                        return res.send(err);
+                    } else
+                        return res.json({success: true, message: 'Review Added Successfully.'});
+                })
+            }
+        });//Movie.findOne
+    })//post review
+    .get(function (req, res) {
+        if (req.body.reviews === true) {
+            Movie.findOne({title: req.body.title}, function (err, movie) {
+                if (err)
+                    return res.send(err);
+                if (movie === null) {
+                    return res.json({
+                        Success: false,
+                        Message: 'Cannot find the movie title ' + req.body.title.toString()
+                    });
+                } else {
+                    Movie.aggregate()
+                        .match({title: req.body.title.toString()})
+                        .lookup({from: 'reviews', localField: 'title', foreignField: 'movieName', as: 'Movie-Reviews'})
+                        .addFields( {avgRating: {$avg: '$Movie-Reviews.rating'}})
+                        .exec(function (err, result) {
+                            movie.avgRating = result[0].avgRating;
+                            if (err) {
+                                return res.send(err);
+                            } else {
+                                return res.status(200).json({
+                                    Message: 'Here is the list of reviews for ' + req.body.title.toString(),
+                                    movie: result
+                                });
+                            }
+                        })
+                }
+            });
+        } else {
+            Movie.findOne({title: req.body.title}, function (err, movie) {
+                if (err) {
+                    return res.send(err);
+                } else if (!movie) {
+                    return res.status(403).json({
+                        Success: false,
+                        Message: 'Cannot find the movie title ' + req.body.title.toString()
+                    });
+                } else {
+                    return res.json({Message: 'Here is your movie ' + req.body.title.toString(), Movie: movie});
+                }
+            })
+        }
+    });
+
+
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
